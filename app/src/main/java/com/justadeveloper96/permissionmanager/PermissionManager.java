@@ -1,5 +1,5 @@
 package com.justadeveloper96.permissionmanager;
-
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,7 +10,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
@@ -21,63 +21,87 @@ import java.util.List;
  * Created by harshit on 10-03-2017.
  */
 
+
 public class PermissionManager {
+
+    public static final String TAG="Permission Manager";
 
     interface PermissionsListener
     {
         public void onPermissionGranted();
-        public void onPermissionRejectedManyTimes();
+        public void onPermissionRejectedManyTimes(List<String> rejectedPerms);
     }
 
-    WeakReference<PermissionsListener> view;
+    WeakReference<AppCompatActivity> view;
+
+    PermissionsListener pListener;
+
     boolean allPermissionGranted;
     List<String> deniedpermissions;
+    List<String> granted;
 
     final int REQUEST_CODE=100;
 
-    public PermissionManager(PermissionsListener view) {
-        this.view = new WeakReference<PermissionsListener>(view);
+    public PermissionManager(AppCompatActivity view) {
+        this.view = new WeakReference<AppCompatActivity>(view);
         deniedpermissions=new ArrayList<>();
+        granted=new ArrayList<>();
     }
 
-    public void requestPermission(String[] permissions)
-    {
-        if(Build.VERSION.SDK_INT< Build.VERSION_CODES.M)
-        {
+    /**
+     * Request permissions.
+     * @param permissions -String Array of permissions to request, for eg: new String[]{PermissionManager.CAMERA} or multiple new String[]{PermissionManger.CAMERE,PermissionManager.CONTACTS}
+     *
+     */
+    public void requestPermission(String[] permissions) {
+        deniedpermissions.clear();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isViewAttached()) {
+            allPermissionGranted = true;
+            for (String permission : permissions)
+                if (getView().checkSelfPermission(permission) == PackageManager.PERMISSION_DENIED) {
+                    allPermissionGranted = false;
+                    deniedpermissions.add(permission);
+                    Log.d(TAG, "denied " + permission);
+                }
+
+
+            if (!allPermissionGranted) {
+                getView().requestPermissions(deniedpermissions.toArray(new String[deniedpermissions.size()]), REQUEST_CODE);
+            } else {
+                getListener().onPermissionGranted();
+            }
+
             return;
         }
-        if(isViewAttached())
-        {
-            allPermissionGranted=true;
-            for (String permission:permissions)
-                if(getView().checkSelfPermission(permission)== PackageManager.PERMISSION_DENIED)
-                {
-                    allPermissionGranted=false;
-                    getView().requestPermissions(permissions,REQUEST_CODE);
-                    deniedpermissions.add(permission);
-                }
-        }
-
+        getListener().onPermissionGranted();
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode==REQUEST_CODE && isViewAttached())
-        {
-           /* if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-                view.get().onPermissionGranted();
-                return;
-            }*/
+        if (requestCode == REQUEST_CODE && isViewAttached() && Build.VERSION.SDK_INT>=Build.VERSION_CODES.M) {
+            String permission_name="";
+            boolean never_ask_again=false;
+            granted.clear();
 
-            for (String permission:deniedpermissions) {
+            for (String permission : deniedpermissions) {
                 if (getView().checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) {
-                    deniedpermissions.remove(permission);
-                    continue;
+                    granted.add(permission);
+                }else
+                {
+                    if(!getView().shouldShowRequestPermissionRationale(permission))
+                    {
+                        never_ask_again=true;
+                    }
+                    permission_name+=","+PermissionManager.getNameFromPermission(permission);
                 }
+            }
 
-                if (getView().shouldShowRequestPermissionRationale(permission)) {
-                    new AlertDialog.Builder(getView()).setTitle("Permission Required").setMessage("need " + permission + " permission")
+            Log.d(TAG,"removing granted from denied"+deniedpermissions.removeAll(granted));
+
+            if (deniedpermissions.size() > 0) {
+                permission_name=permission_name.substring(1);
+                if (!never_ask_again) {
+                    new AlertDialog.Builder(getView()).setTitle("Permission Required").setMessage("We need permissions to access " + permission_name + " permissions")
                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -87,11 +111,11 @@ public class PermissionManager {
                             .setNegativeButton("No", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    Toast.makeText(getView(), "He denied again", Toast.LENGTH_SHORT).show();
+                                    getListener().onPermissionRejectedManyTimes(deniedpermissions);
                                 }
                             }).show();
                 } else {
-                    new AlertDialog.Builder(getView()).setTitle("Permission Required").setMessage("need " + permission + " permission")
+                    new AlertDialog.Builder(getView()).setTitle("Permission Required").setMessage("We need permissions to access " + permission_name + " permission")
                             .setPositiveButton("Go to Settings", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -105,25 +129,41 @@ public class PermissionManager {
                             .setNegativeButton("No", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    Toast.makeText(getView(), "He denied again", Toast.LENGTH_SHORT).show();
+                                    getListener().onPermissionRejectedManyTimes(deniedpermissions);
                                 }
                             }).show();
                 }
-            }
 
-            if (deniedpermissions.size()<1)
+            }
+            else
             {
-                view.get().onPermissionGranted();
-                view=null;
+                getListener().onPermissionGranted();
             }
         }
     }
 
-    public boolean isViewAttached() {
+
+    private boolean isViewAttached() {
         return view.get()!=null?true:false;
     }
 
-    public AppCompatActivity getView() {
-        return (AppCompatActivity)view.get();
+    private AppCompatActivity getView() {
+        return view.get();
+    }
+
+    private PermissionsListener getListener() {
+        return pListener;
+    }
+
+    public static String getNameFromPermission(String permission)
+    {
+        String[] split=permission.split("\\.");
+        return split[split.length-1];
+    }
+
+    public PermissionManager setListener(PermissionsListener pListener)
+    {
+        this.pListener=pListener;
+        return this;
     }
 }
