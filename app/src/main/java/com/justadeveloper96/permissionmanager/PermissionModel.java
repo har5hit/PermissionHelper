@@ -1,6 +1,5 @@
 package com.justadeveloper96.permissionmanager;
 
-import android.databinding.ObservableField;
 
 /**
  * Created by harshit on 10-03-2017.

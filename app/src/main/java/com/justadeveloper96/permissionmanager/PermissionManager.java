@@ -1,6 +1,5 @@
 package com.justadeveloper96.permissionmanager;
-import android.Manifest;
-import android.annotation.TargetApi;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -28,8 +26,8 @@ public class PermissionManager {
 
     interface PermissionsListener
     {
-        public void onPermissionGranted();
-        public void onPermissionRejectedManyTimes(List<String> rejectedPerms);
+         void onPermissionGranted();
+         void onPermissionRejectedManyTimes(List<String> rejectedPerms);
     }
 
     WeakReference<AppCompatActivity> view;
@@ -53,7 +51,7 @@ public class PermissionManager {
      * @param permissions -String Array of permissions to request, for eg: new String[]{PermissionManager.CAMERA} or multiple new String[]{PermissionManger.CAMERE,PermissionManager.CONTACTS}
      *
      */
-    public void requestPermission(String[] permissions) {
+    protected void requestPermission(String[] permissions) {
         deniedpermissions.clear();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isViewAttached()) {
@@ -64,7 +62,6 @@ public class PermissionManager {
                     deniedpermissions.add(permission);
                     Log.d(TAG, "denied " + permission);
                 }
-
 
             if (!allPermissionGranted) {
                 getView().requestPermissions(deniedpermissions.toArray(new String[deniedpermissions.size()]), REQUEST_CODE);
@@ -77,7 +74,7 @@ public class PermissionManager {
         getListener().onPermissionGranted();
     }
 
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    protected void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CODE && isViewAttached() && Build.VERSION.SDK_INT>=Build.VERSION_CODES.M) {
             String permission_name="";
             boolean never_ask_again=false;
@@ -96,7 +93,7 @@ public class PermissionManager {
                 }
             }
 
-            Log.d(TAG,"removing granted from denied"+deniedpermissions.removeAll(granted));
+            deniedpermissions.removeAll(granted);
 
             if (deniedpermissions.size() > 0) {
                 permission_name=permission_name.substring(1);
@@ -161,9 +158,15 @@ public class PermissionManager {
         return split[split.length-1];
     }
 
-    public PermissionManager setListener(PermissionsListener pListener)
+    protected PermissionManager setListener(PermissionsListener pListener)
     {
         this.pListener=pListener;
         return this;
+    }
+
+    protected void onDestroy()
+    {
+        pListener=null;
+        view=null;
     }
 }
