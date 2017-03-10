@@ -29,7 +29,6 @@ protected void onCreate(Bundle savedInstanceState) {
 			//if user keeps on denying request
 		}
 	});
-
 ```
 
 ##Requesting Permissions
@@ -56,13 +55,12 @@ The android system will give the results of the request and we have to pass that
 public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-					/**
-                    * pass the permission results to the PermissionManager for processing.
-                    */
+	/**
+    * pass the permission results to the PermissionManager for processing.
+    */
     permissionManager.onRequestPermissionsResult(requestCode,permissions,grantResults);
 
 }
-
 ```
 
 ### Response
@@ -93,9 +91,7 @@ grant permissions in settings. If the user agrees to grant permission or denies 
 After we are done with our permission requesting process and we no longer need the PermissionManager we can call onDestroy() to free it.
 
 ```
-
 	permissionManager.onDestroy();
-
 ```
 
 
