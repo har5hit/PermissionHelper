@@ -1,9 +1,7 @@
 # PermissionManager
 Android Permission Manager Library for easy permission requests.
+This will handle most of your permission handling job and simplify it by giving only 2 callbacks to the listener, success or failure.
 
-# Project Title
-
-One Paragraph of project description goes here
 
 ## Getting Started
 
