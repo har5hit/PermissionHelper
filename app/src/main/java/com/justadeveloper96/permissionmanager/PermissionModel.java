@@ -9,7 +9,7 @@ public class PermissionModel {
 
     private String name;
     private String value;
-    private boolean selected=false;
+    private boolean selected;
 
     public boolean isSelected() {
         return selected;
@@ -19,9 +19,11 @@ public class PermissionModel {
         this.selected = selected;
     }
 
-    public PermissionModel(String name, String value) {
-        this.name = name;
-        this.value = value;
+    public PermissionModel(String permission) {
+        value = permission;
+        String[] split=permission.split("\\.");
+        name=split[split.length-1];
+        selected=false;
     }
 
     public String getName() {

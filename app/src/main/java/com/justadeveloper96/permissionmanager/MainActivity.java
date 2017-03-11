@@ -1,10 +1,11 @@
 package com.justadeveloper96.permissionmanager;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
+import android.app.Fragment;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,18 +42,7 @@ public class MainActivity extends AppCompatActivity{
         /**
          * Get all app permissions from Manifest
          */
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(this.getPackageName(), PackageManager.GET_PERMISSIONS);
-            if (info.requestedPermissions != null) {
-                for (String p : info.requestedPermissions) {
-                    manifest_permissions.add(new PermissionModel(PermissionManager.getNameFromPermission(p),p));
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        manifest_permissions.addAll(PermissionManager.getAllDeniedPermissions(this));
 
         final ArrayAdapter<PermissionModel> arrayAdapter=new ArrayAdapter<PermissionModel>(this,android.R.layout.simple_list_item_checked,manifest_permissions);
         binding.listview.setAdapter(arrayAdapter);
@@ -71,6 +61,12 @@ public class MainActivity extends AppCompatActivity{
                 permissioncount.set(permissioncount.get()+1);
             }
         });
+
+
+        Fragment m=new Fragment();
+        android.support.v4.app.Fragment n=new android.support.v4.app.Fragment();
+        FragmentActivity c=new FragmentActivity();
+        DialogFragment d=new DialogFragment();
 
 
         /**

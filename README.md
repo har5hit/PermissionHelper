@@ -1,11 +1,11 @@
 # PermissionManager
 Android Permission Manager Library for easy permission requests.
 This will handle most of your permission handling job and simplify it by giving only 2 callbacks to the listener, success or failure.
-
+Included a Rationale to show when user denies permission.
 
 ## Getting Started
 
-Just create PermissionManager object by passing the Activity and a listener for callbacks
+Just create PermissionManager object by passing the Activity/Fragmemt and a listener for callbacks
 
 ```
 PermissionManager permissionManager;
