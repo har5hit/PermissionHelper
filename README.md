@@ -5,7 +5,7 @@ Included a Rationale to show when user denies permission.
 
 ## Getting Started
 
-Just create PermissionManager object by passing the Activity/Fragmemt and a listener for callbacks
+Just create PermissionManager object by passing the Activity/Fragment and a listener for callbacks
 
 ```
 PermissionManager permissionManager;
