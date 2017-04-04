@@ -73,7 +73,7 @@ public class PermissionManager {
      * @param permissions -String Array of permissions to request, for eg: new String[]{PermissionManager.CAMERA} or multiple new String[]{PermissionManger.CAMERE,PermissionManager.CONTACTS}
      *
      */
-    protected void requestPermission(String[] permissions) {
+    public void requestPermission(String[] permissions) {
 
         deniedpermissions.clear();
 
@@ -106,7 +106,7 @@ public class PermissionManager {
         }
     }
 
-    protected void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CODE && isViewAttached() && Build.VERSION.SDK_INT>=Build.VERSION_CODES.M) {
             String permission_name="";
             boolean never_ask_again=false;
@@ -143,13 +143,15 @@ public class PermissionManager {
     }
 
     private AlertDialog goToSettingsAlertDialog(final Activity view, String permission_name) {
-        return new AlertDialog.Builder(view).setTitle("Permission Required").setMessage("We need permissions to access " + permission_name + " permission")
+        return new AlertDialog.Builder(view).setTitle("Permission Required").setMessage("We need " + permission_name +" permissions")
                 .setPositiveButton("Go to Settings", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         final Intent intent = new Intent();
                         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         intent.addCategory(Intent.CATEGORY_DEFAULT);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                         intent.setData(Uri.parse("package:" + view.getPackageName()));
                         view.startActivity(intent);
                     }
@@ -164,7 +166,7 @@ public class PermissionManager {
 
     private AlertDialog getRequestAgainAlertDialog(Activity view, String permission_name) {
         return new AlertDialog.Builder(view).setTitle("Permission Required")
-                .setMessage("We need permissions to access " + permission_name + " permissions")
+                .setMessage("We need " + permission_name +" permissions")
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -193,10 +195,6 @@ public class PermissionManager {
                 return frag_v4_view.get()!=null;
         }
         return false;
-    }
-
-    public int getTYPE() {
-        return TYPE;
     }
 
     private Activity getActivityView() {
@@ -235,13 +233,13 @@ public class PermissionManager {
         return split[split.length-1];
     }
 
-    protected PermissionManager setListener(PermissionsListener pListener)
+    public PermissionManager setListener(PermissionsListener pListener)
     {
         this.pListener=pListener;
         return this;
     }
 
-    protected void onDestroy()
+    public void onDestroy()
     {
         pListener=null;
         activity_view=null;
