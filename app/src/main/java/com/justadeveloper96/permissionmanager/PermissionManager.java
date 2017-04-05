@@ -32,7 +32,7 @@ public class PermissionManager {
     private  final int FRAGMENT=2;
     private  final int FRAGMENTv4=3;
 
-    interface PermissionsListener
+    public interface PermissionsListener
     {
         void onPermissionGranted();
         void onPermissionRejectedManyTimes(List<String> rejectedPerms);
@@ -103,6 +103,10 @@ public class PermissionManager {
             {
                 getListener().onPermissionGranted();
             }
+        }
+        else
+        {
+            getListener().onPermissionGranted();
         }
     }
 
