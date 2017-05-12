@@ -1,22 +1,28 @@
 package com.justadeveloper96.permissionmanager;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.Toast;
+
+import com.justadeveloper96.permissionmanager.databinding.ActivityMainBinding;
+
 import java.util.ArrayList;
 import java.util.List;
-import com.justadeveloper96.permissionmanager.databinding.ActivityMainBinding;
 
 /**
  * Created by harshit on 10-03-2017.
@@ -42,7 +48,7 @@ public class MainActivity extends AppCompatActivity{
         /**
          * Get all app permissions from Manifest
          */
-        manifest_permissions.addAll(PermissionManager.getAllDeniedPermissions(this));
+        manifest_permissions.addAll(getAllDeniedPermissions(this));
 
         final ArrayAdapter<PermissionModel> arrayAdapter=new ArrayAdapter<PermissionModel>(this,android.R.layout.simple_list_item_checked,manifest_permissions);
         binding.listview.setAdapter(arrayAdapter);
@@ -74,12 +80,12 @@ public class MainActivity extends AppCompatActivity{
          */
         permissionManager=new PermissionManager(this).setListener(new PermissionManager.PermissionsListener() {
             @Override
-            public void onPermissionGranted() {
+            public void onPermissionGranted(int request_code) {
                 Toast.makeText(MainActivity.this,"Granted all",Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onPermissionRejectedManyTimes(List<String> rejectedPerms) {
+            public void onPermissionRejectedManyTimes(List<String> rejectedPerms, int request_code) {
                 String s="";
                 for(String perms:rejectedPerms)
                 {
@@ -99,10 +105,9 @@ public class MainActivity extends AppCompatActivity{
                     if(item.isSelected())
                     {
                         needed_permissions.add(item.getValue());
-                        Log.d(PermissionManager.TAG,"Going to Request"+item.getName());
                     }
                 }
-                permissionManager.requestPermission(needed_permissions.toArray(new String[needed_permissions.size()]));
+                permissionManager.requestPermission(needed_permissions.toArray(new String[needed_permissions.size()]),100);
             }
         });
 
@@ -122,5 +127,25 @@ public class MainActivity extends AppCompatActivity{
     protected void onDestroy() {
         super.onDestroy();
         permissionManager.onDestroy();
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public static List<PermissionModel> getAllDeniedPermissions(Context ctx)
+    {
+        List<PermissionModel> temp=new ArrayList<>();
+        try {
+            PackageInfo info = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), PackageManager.GET_PERMISSIONS);
+            if (info.requestedPermissions != null) {
+                for (String p : info.requestedPermissions) {
+                    if (ctx.checkSelfPermission(p)==PackageManager.PERMISSION_DENIED)
+                        temp.add(new PermissionModel(p));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return temp;
     }
 }

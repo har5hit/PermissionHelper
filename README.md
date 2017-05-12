@@ -17,14 +17,14 @@ protected void onCreate(Bundle savedInstanceState) {
 	.
 	permissionManager=new PermissionManager(this).setListener(new PermissionManager.PermissionsListener() {
 		@Override
-		public void onPermissionGranted() {
+		public void onPermissionGranted(int request_code) {
 
 			//if user grants permission.
 
 		}
 
 		@Override
-		public void onPermissionRejectedManyTimes(List<String> rejectedPerms) {
+		public void onPermissionRejectedManyTimes(List<String> rejectedPerms,int request_code) {
 
 			//if user keeps on denying request
 		}
@@ -34,7 +34,7 @@ protected void onCreate(Bundle savedInstanceState) {
 ##Requesting Permissions
 
 As we did in normal runtime permissions we will send a String array with permissions we want to request, we can send single or multiple permissions with it,
-This will request the permissions.
+This will request the permissions with the specified request code..
 
 ```
 	String[] needed_permissions=new String[]{Manifest.permission.CAMERA};
@@ -44,7 +44,7 @@ This will request the permissions.
 	String[] needed_permissions=new String[]{Manifest.permission.CAMERA, Manifest.permission.CALL_PHONE};
 
 
-	permissionManager.requestPermission(needed_permissions);
+	permissionManager.requestPermission(needed_permissions,100);
 
 ```
 
@@ -70,14 +70,14 @@ grant permissions in settings. If the user agrees to grant permission or denies 
 
 ```
 	@Override
-	public void onPermissionGranted() {
+	public void onPermissionGranted(int request_code) {
 
 		//if user grants permission.
 
 	}
 
 	@Override
-	public void onPermissionRejectedManyTimes(List<String> rejectedPerms) {
+	public void onPermissionRejectedManyTimes(List<String> rejectedPerms,int request_code) {
 
 		//if user keeps on denying request
 
