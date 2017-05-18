@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.Toast;
 
+import com.justadeveloper96.permissionhelper.PermissionHelper;
 import com.justadeveloper96.permissionmanager.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity{
 
-    PermissionManager permissionManager;
+    PermissionHelper permissionManager;
     ObservableField<Integer> permissioncount;
 
     @Override
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity{
         /**
          * Initialize permission Manager and set Listener.
          */
-        permissionManager=new PermissionManager(this).setListener(new PermissionManager.PermissionsListener() {
+        permissionManager=new PermissionHelper(this).setListener(new PermissionHelper.PermissionsListener() {
             @Override
             public void onPermissionGranted(int request_code) {
                 Toast.makeText(MainActivity.this,"Granted all",Toast.LENGTH_SHORT).show();
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity{
                 String s="";
                 for(String perms:rejectedPerms)
                 {
-                    s+=","+PermissionManager.getNameFromPermission(perms);
+                    s+=","+ PermissionHelper.getNameFromPermission(perms);
                 }
                 Toast.makeText(MainActivity.this,"Rejected "+s.substring(1),Toast.LENGTH_SHORT).show();
             }
@@ -113,6 +114,7 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
