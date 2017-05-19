@@ -32,7 +32,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity{
 
-    PermissionHelper permissionManager;
+    PermissionHelper permissionHelper;
     ObservableField<Integer> permissioncount;
 
     @Override
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity{
         /**
          * Initialize permission Manager and set Listener.
          */
-        permissionManager=new PermissionHelper(this).setListener(new PermissionHelper.PermissionsListener() {
+        permissionHelper =new PermissionHelper(this).setListener(new PermissionHelper.PermissionsListener() {
             @Override
             public void onPermissionGranted(int request_code) {
                 Toast.makeText(MainActivity.this,"Granted all",Toast.LENGTH_SHORT).show();
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity{
                         needed_permissions.add(item.getValue());
                     }
                 }
-                permissionManager.requestPermission(needed_permissions.toArray(new String[needed_permissions.size()]),100);
+                permissionHelper.requestPermission(needed_permissions.toArray(new String[needed_permissions.size()]),100);
             }
         });
 
@@ -122,13 +122,13 @@ public class MainActivity extends AppCompatActivity{
         /**
          * pass the permission results to the PermissionManager for processing.
          */
-        permissionManager.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        permissionHelper.onRequestPermissionsResult(requestCode,permissions,grantResults);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        permissionManager.onDestroy();
+        permissionHelper.onDestroy();
     }
 
     @TargetApi(Build.VERSION_CODES.M)

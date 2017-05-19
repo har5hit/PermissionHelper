@@ -1,21 +1,21 @@
-# PermissionManager
+# PermissionHelper
 Android Permission Manager Library for easy permission requests.
 This will handle most of your permission handling job and simplify it by giving only 2 callbacks to the listener, success or failure.
 Included a Rationale to show when user denies permission.
 
 ## Getting Started
 
-Just create PermissionManager object by passing the Activity/Fragment and a listener for callbacks
+Just create PermissionHelper object by passing the Activity/Fragment and a listener for callbacks
 
 ```
-PermissionManager permissionManager;
+PermissionHelper permissionHelper;
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	.
 	.
-	permissionManager=new PermissionManager(this).setListener(new PermissionManager.PermissionsListener() {
+	permissionHelper=new PermissionHelper(this).setListener(new PermissionHelper.PermissionsListener() {
 		@Override
 		public void onPermissionGranted(int request_code) {
 
@@ -44,11 +44,11 @@ This will request the permissions with the specified request code..
 	String[] needed_permissions=new String[]{Manifest.permission.CAMERA, Manifest.permission.CALL_PHONE};
 
 
-	permissionManager.requestPermission(needed_permissions,100);
+	permissionHelper.requestPermission(needed_permissions,100);
 
 ```
 
-The android system will give the results of the request and we have to pass that to the PermissionManager to process.
+The android system will give the results of the request and we have to pass that to the PermissionHelper to process.
 
 ```
 @Override
@@ -56,17 +56,17 @@ public void onRequestPermissionsResult(int requestCode, @NonNull String[] permis
     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
 	/**
-    * pass the permission results to the PermissionManager for processing.
+    * pass the permission results to the PermissionHelper for processing.
     */
-    permissionManager.onRequestPermissionsResult(requestCode,permissions,grantResults);
+    permissionHelper.onRequestPermissionsResult(requestCode,permissions,grantResults);
 
 }
 ```
 
 ### Response
 
-The PermissionManager will request permission, if denied, will show rationale, if never ask again is checked, will show a dialog to
-grant permissions in settings. If the user agrees to grant permission or denies again and again, the PermissionManager will give the callback to the listener methods.
+The PermissionHelper will request permission, if denied, will show rationale, if never ask again is checked, will show a dialog to
+grant permissions in settings. If the user agrees to grant permission or denies again and again, the PermissionHelper will give the callback to the listener methods.
 
 ```
 	@Override
@@ -88,16 +88,16 @@ grant permissions in settings. If the user agrees to grant permission or denies 
 
 ### Closing
 
-After we are done with our permission requesting process and we no longer need the PermissionManager we can call onDestroy() to free it.
+After we are done with our permission requesting process and we no longer need the PermissionHelper we can call onDestroy() to free it.
 
 ```
-	permissionManager.onDestroy();
+	permissionHelper.onDestroy();
 ```
 
 
 ## Demo
 
-The project is a demo with a list view of permissions and using PermissionManager for handling request.
+The project is a demo with a list view of permissions and using PermissionHelper for handling request.
 Clone the source, compile and run the project for trial.
 
 
