@@ -20,6 +20,7 @@ import android.widget.CheckedTextView;
 import android.widget.Toast;
 
 import com.justadeveloper96.permissionhelper.PermissionHelper;
+import com.justadeveloper96.permissionhelper.PermissionsListener;
 import com.justadeveloper96.permissionmanager.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity{
         /**
          * Initialize permission Manager and set Listener.
          */
-        permissionHelper =new PermissionHelper(this).setListener(new PermissionHelper.PermissionsListener() {
+        permissionHelper =new PermissionHelper(this).setListener(new PermissionsListener() {
             @Override
             public void onPermissionGranted(int request_code) {
                 Toast.makeText(MainActivity.this,"Granted all",Toast.LENGTH_SHORT).show();
