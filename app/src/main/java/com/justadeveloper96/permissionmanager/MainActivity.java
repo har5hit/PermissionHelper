@@ -20,7 +20,7 @@ import android.widget.CheckedTextView;
 import android.widget.Toast;
 
 import com.justadeveloper96.permissionhelper.PermissionHelper;
-import com.justadeveloper96.permissionhelper.PermissionsListener;
+import com.justadeveloper96.permissionhelper.PermissionHelper.PermissionsListener;
 import com.justadeveloper96.permissionmanager.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
@@ -69,12 +69,6 @@ public class MainActivity extends AppCompatActivity{
                 permissioncount.set(permissioncount.get()+1);
             }
         });
-
-
-        Fragment m=new Fragment();
-        android.support.v4.app.Fragment n=new android.support.v4.app.Fragment();
-        FragmentActivity c=new FragmentActivity();
-        DialogFragment d=new DialogFragment();
 
 
         /**
