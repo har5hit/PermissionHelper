@@ -18,13 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by harshit on 10-03-2017.
+ * Created by harshith on 10-03-2017.
  */
 
 
 public class PermissionHelper {
 
-    private static final String TAG = "Permission Manager";
+    private static final String TAG = "Permission Helper";
     private int TYPE = 0;
     private final int ACTIVITY = 1;
     private final int FRAGMENT = 2;
@@ -68,8 +68,13 @@ public class PermissionHelper {
      */
     public void requestPermission(@NonNull String[] permissions, int request_code) {
         deniedpermissions.clear();
+		
+		if(!isViewAttached())
+		{
+			return;
+		}
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isViewAttached()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             boolean allPermissionGranted = true;
 
             for (String permission : permissions) {
@@ -95,7 +100,7 @@ public class PermissionHelper {
                 getListener().onPermissionGranted(request_code);
             }
         } else {
-            getListener().onPermissionGranted(request_code);
+                getListener().onPermissionGranted(request_code);
         }
     }
 
@@ -108,7 +113,7 @@ public class PermissionHelper {
     @RequiresApi(Build.VERSION_CODES.M)
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (isViewAttached()) {
-            String permission_name = "";
+            StringBuilder permission_name = new StringBuilder();
             boolean never_ask_again = false;
             granted.clear();
 
@@ -119,18 +124,19 @@ public class PermissionHelper {
                     if (!getActivity().shouldShowRequestPermissionRationale(permission)) {
                         never_ask_again = true;
                     }
-                    permission_name += "," + PermissionHelper.getNameFromPermission(permission);
+                    permission_name.append(",");
+                    permission_name.append(PermissionHelper.getNameFromPermission(permission));
                 }
             }
-
+            String res=permission_name.toString();
             deniedpermissions.removeAll(granted);
 
             if (deniedpermissions.size() > 0) {
-                permission_name = permission_name.substring(1);
+                res = res.substring(1);
                 if (!never_ask_again) {
-                    getRequestAgainAlertDialog(getActivity(), permission_name,requestCode);
+                    getRequestAgainAlertDialog(getActivity(), res,requestCode);
                 } else {
-                    goToSettingsAlertDialog(getActivity(), permission_name,requestCode);
+                    goToSettingsAlertDialog(getActivity(), res,requestCode);
                 }
             } else {
                 getListener().onPermissionGranted(requestCode);
@@ -229,6 +235,9 @@ public class PermissionHelper {
         }
         if (key.contains("phone") || key.contains("call")) {
             return "Call";
+        }
+        if (key.contains("location")) {
+            return "Location";
         }
 
         String[] split = permission.split("\\.");
