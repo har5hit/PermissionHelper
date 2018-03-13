@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 
 ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'permission-helper'
+    bintrayRepo = 'PermissionHelper'
+    bintrayName = 'PermissionHelper'
 
     publishedGroupId = 'com.justadeveloper.helpers'
     libraryName = 'PermissionHelper'
