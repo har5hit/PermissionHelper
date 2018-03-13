@@ -4,7 +4,7 @@ ext {
     bintrayRepo = 'PermissionHelper'
     bintrayName = 'PermissionHelper'
 
-    publishedGroupId = 'com.justadeveloper.helpers'
+    publishedGroupId = 'com.justadeveloper.utils'
     libraryName = 'PermissionHelper'
     artifact = 'permission-helper'
 
