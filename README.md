@@ -3,7 +3,7 @@ Android Permission Helper Library for easy permission requests.
 This will handle most of your permission handling job and simplify it by giving only 2 callbacks to the listener, success or failure.
 Included a Rationale to show when user denies permission.
 
-##Download
+## Download
 
 Add the library to app build.gradle
 
@@ -39,7 +39,7 @@ protected void onCreate(Bundle savedInstanceState) {
 	});
 ```
 
-##Requesting Permissions
+## Requesting Permissions
 
 As we did in normal runtime permissions we will send a String array with permissions we want to request, we can send single or multiple permissions with it,
 This will request the permissions with the specified request code..
