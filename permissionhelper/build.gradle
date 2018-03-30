@@ -4,16 +4,16 @@ ext {
     bintrayRepo = 'PermissionHelper'
     bintrayName = 'PermissionHelper'
 
-    publishedGroupId = 'com.justadeveloper.utils'
+    publishedGroupId = 'com.justadeveloper96.utils'
     libraryName = 'PermissionHelper'
-    artifact = 'permission-helper'
+    artifact = 'permissionhelper'
 
     libraryDescription = 'Simple Solution to implement Runtime Permissions in Android 6.0 and above'
 
     siteUrl = 'https://github.com/har5hit/PermissionHelper'
     gitUrl = 'https://github.com/har5hit/PermissionHelper.git'
 
-    libraryVersion = '1.0.2'
+    libraryVersion = '1.0.4'
 
     developerId = 'har5hit'
     developerName = 'Harshith Shetty'
@@ -31,8 +31,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 2
-        versionName "1.0.2"
+        versionCode 4
+        versionName "1.0.4"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

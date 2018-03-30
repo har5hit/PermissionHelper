@@ -3,6 +3,14 @@ Android Permission Helper Library for easy permission requests.
 This will handle most of your permission handling job and simplify it by giving only 2 callbacks to the listener, success or failure.
 Included a Rationale to show when user denies permission.
 
+##Download
+
+Add the library to app build.gradle
+
+```
+implementation 'com.justadeveloper96.utils:permissionhelper:1.0.4'
+```
+
 ## Getting Started
 
 Just create PermissionHelper object by passing the Activity/Fragment and a listener for callbacks
@@ -37,14 +45,14 @@ As we did in normal runtime permissions we will send a String array with permiss
 This will request the permissions with the specified request code..
 
 ```
-	String[] needed_permissions=new String[]{Manifest.permission.CAMERA};
+String[] needed_permissions=new String[]{Manifest.permission.CAMERA};
 
-	-or-
+-or-
 
-	String[] needed_permissions=new String[]{Manifest.permission.CAMERA, Manifest.permission.CALL_PHONE};
+String[] needed_permissions=new String[]{Manifest.permission.CAMERA, Manifest.permission.CALL_PHONE};
 
 
-	permissionHelper.requestPermission(needed_permissions,100);
+permissionHelper.requestPermission(needed_permissions,100);
 
 ```
 
@@ -91,7 +99,7 @@ grant permissions in settings. If the user agrees to grant permission or denies 
 After we are done with our permission requesting process and we no longer need the PermissionHelper we can call onDestroy() to free it.
 
 ```
-	permissionHelper.onDestroy();
+permissionHelper.onDestroy();
 ```
 
 
