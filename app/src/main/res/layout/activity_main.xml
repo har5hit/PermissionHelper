@@ -5,9 +5,9 @@
 
 
     <data>
-        <variable name="count" type="android.databinding.ObservableField"/>
+        <variable name="count" type="androidx.databinding.ObservableField"/>
     </data>
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.justadeveloper96.permissionmanager.MainActivity">
@@ -67,5 +67,5 @@
             android:layout_marginEnd="8dp" />
 
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

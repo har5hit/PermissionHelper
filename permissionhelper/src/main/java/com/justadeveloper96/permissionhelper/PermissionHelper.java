@@ -1,5 +1,6 @@
 package com.justadeveloper96.permissionhelper;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.DialogInterface;
@@ -8,14 +9,16 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by harshith on 10-03-2017.
@@ -37,7 +40,7 @@ public class PermissionHelper {
 
     private WeakReference<Activity> activity_view;
     private WeakReference<Fragment> frag_view;
-    private WeakReference<android.support.v4.app.Fragment> frag_v4_view;
+    private WeakReference<androidx.fragment.app.Fragment> frag_v4_view;
 
     private PermissionsListener pListener;
 
@@ -55,8 +58,8 @@ public class PermissionHelper {
 
     }
 
-    public PermissionHelper(android.support.v4.app.Fragment view) {
-        this.frag_v4_view = new WeakReference<android.support.v4.app.Fragment>(view);
+    public PermissionHelper(androidx.fragment.app.Fragment view) {
+        this.frag_v4_view = new WeakReference<androidx.fragment.app.Fragment>(view);
         TYPE = FRAGMENTv4;
     }
 
@@ -68,20 +71,25 @@ public class PermissionHelper {
      */
     public void requestPermission(@NonNull String[] permissions, int request_code) {
         deniedpermissions.clear();
-		
-		if(!isViewAttached())
-		{
-			return;
-		}
+
+        if(!isViewAttached())
+        {
+            return;
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             boolean allPermissionGranted = true;
 
             for (String permission : permissions) {
-                if (getActivity().checkSelfPermission(permission) == PackageManager.PERMISSION_DENIED) {
-                    allPermissionGranted = false;
-                    deniedpermissions.add(permission);
-                    Log.d(TAG, "denied " + permission);
+                try {
+                    if (getActivity().checkSelfPermission(permission) == PackageManager.PERMISSION_DENIED) {
+                        allPermissionGranted = false;
+                        deniedpermissions.add(permission);
+                        Log.d(TAG, "denied " + permission);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return;
                 }
             }
 
@@ -100,7 +108,7 @@ public class PermissionHelper {
                 getListener().onPermissionGranted(request_code);
             }
         } else {
-                getListener().onPermissionGranted(request_code);
+            getListener().onPermissionGranted(request_code);
         }
     }
 
@@ -146,7 +154,7 @@ public class PermissionHelper {
 
     private AlertDialog goToSettingsAlertDialog(final Activity view, String permission_name, final int request_code) {
         return new AlertDialog.Builder(view).setTitle("Permission Required").setMessage("We need " + permission_name + " permissions")
-                .setPositiveButton("Go to Settings", new DialogInterface.OnClickListener() {
+                .setPositiveButton("GO TO SETTINGS", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         final Intent intent = new Intent();
@@ -158,7 +166,7 @@ public class PermissionHelper {
                         view.startActivity(intent);
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         getListener().onPermissionRejectedManyTimes(deniedpermissions, request_code);
@@ -169,13 +177,13 @@ public class PermissionHelper {
     private AlertDialog getRequestAgainAlertDialog(Activity view, String permission_name, final int request_code) {
         return new AlertDialog.Builder(view).setTitle("Permission Required")
                 .setMessage("We need " + permission_name + " permissions")
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         requestPermission(deniedpermissions.toArray(new String[deniedpermissions.size()]), request_code);
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         getListener().onPermissionRejectedManyTimes(deniedpermissions, request_code);
@@ -204,7 +212,7 @@ public class PermissionHelper {
         return frag_view.get();
     }
 
-    private android.support.v4.app.Fragment getFrag_v4_view() {
+    private androidx.fragment.app.Fragment getFrag_v4_view() {
         return frag_v4_view.get();
     }
 
@@ -224,24 +232,28 @@ public class PermissionHelper {
         return pListener;
     }
 
+
+    private static Map<String,String> labelsMap;
+
     public static String getNameFromPermission(String permission) {
-
-        String key = permission.toLowerCase();
-        if (key.contains("storage")) {
-            return "Storage";
+        if (labelsMap==null){
+            labelsMap=new HashMap<>();
+            labelsMap.put(Manifest.permission.READ_EXTERNAL_STORAGE,"Read Storage");
+            labelsMap.put(Manifest.permission.WRITE_EXTERNAL_STORAGE,"Write Storage");
+            labelsMap.put(Manifest.permission.CAMERA,"Camera");
+            labelsMap.put(Manifest.permission.CALL_PHONE,"Call");
+            labelsMap.put(Manifest.permission.READ_SMS,"SMS");
+            labelsMap.put(Manifest.permission.RECEIVE_SMS,"Receive SMS");
+            labelsMap.put(Manifest.permission.ACCESS_FINE_LOCATION,"Exact Location");
+            labelsMap.put(Manifest.permission.ACCESS_COARSE_LOCATION,"Close Location");
         }
-        if (key.contains("camera")) {
-            return "Camera";
+        String value=labelsMap.get(permission);
+        if (value==null) {
+            String[] split = permission.split("\\.");
+            return split[split.length - 1];
+        }else {
+            return value;
         }
-        if (key.contains("phone") || key.contains("call")) {
-            return "Call";
-        }
-        if (key.contains("location")) {
-            return "Location";
-        }
-
-        String[] split = permission.split("\\.");
-        return split[split.length - 1];
     }
 
     public PermissionHelper setListener(PermissionsListener pListener) {
