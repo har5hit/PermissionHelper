@@ -8,7 +8,7 @@ Included a Rationale to show when user denies permission.
 Add the library to app build.gradle
 
 ```
-implementation 'com.justadeveloper96.utils:permissionhelper:1.0.4'
+implementation 'com.justadeveloper96.utils:permissionhelper:1.0.5'
 ```
 
 ## Getting Started
