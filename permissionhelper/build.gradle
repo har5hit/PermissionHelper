@@ -3,28 +3,18 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
-ext {
-    bintrayRepo = 'PermissionHelper'
-    bintrayName = 'PermissionHelper'
-
-    publishedGroupId = 'com.justadeveloper96.utils'
-    libraryName = 'PermissionHelper'
-    artifact = 'permissionhelper'
-
-    libraryDescription = 'Simple Solution to implement Runtime Permissions in Android 6.0 and above'
-
-    siteUrl = 'https://github.com/har5hit/PermissionHelper'
-    gitUrl = 'https://github.com/har5hit/PermissionHelper.git'
-
-    libraryVersion = '1.0.4'
-
-    developerId = 'har5hit'
-    developerName = 'Harshith Shetty'
-    developerEmail = 'justadeveloper96@gmail.com'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
+project.ext {
+    mavDevelopers = ["har5hit":"Harshith Shetty"]
+    mavSiteUrl = "https://github.com/har5hit/PermissionHelper"
+    mavGitUrl = mavSiteUrl + '.git'
+    mavProjectName = 'PermissionHelper'
+    mavLibraryDescription = 'Simple Solution to implement Runtime Permissions in Android 6.0 and above'
+    mavLibraryLicenses = ["Apache-2.0":'http://www.apache.org/licenses/LICENSE-2.0.txt']
+    mavLibraryDescription = "A simple description of the project"
+    mavVersion = "1.0.5"
+    mavPublishToRemoteRepo = true
+    mavRemoteRepoUser = "har5hit@live.com"
+    mavRepoRemoteUrl = "https://dl.bintray.com/har5hit/PermissionHelper"
 }
 
 android {
@@ -34,7 +24,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 4
-        versionName "1.0.4"
+        versionName "1.0.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -52,5 +42,5 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.31'
 }
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+apply from: 'https://raw.githubusercontent.com/sky-uk/gradle-maven-plugin/master/gradle-mavenizer.gradle'
+
