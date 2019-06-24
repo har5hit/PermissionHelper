@@ -11,7 +11,7 @@ project.ext {
     mavLibraryDescription = 'Simple Solution to implement Runtime Permissions in Android 6.0 and above'
     mavLibraryLicenses = ["Apache-2.0":'http://www.apache.org/licenses/LICENSE-2.0.txt']
     mavLibraryDescription = "A simple description of the project"
-    mavVersion = "1.0.5"
+    mavVersion = "1.1.0"
     mavPublishToRemoteRepo = true
     mavRemoteRepoUser = "har5hit@live.com"
     mavRepoRemoteUrl = "https://dl.bintray.com/har5hit/PermissionHelper"
@@ -24,7 +24,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 4
-        versionName "1.0.5"
+        versionName "1.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
