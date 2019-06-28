@@ -2,19 +2,19 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.novoda.bintray-release'
 
-project.ext {
-    mavDevelopers = ["har5hit":"Harshith Shetty"]
-    mavSiteUrl = "https://github.com/har5hit/PermissionHelper"
-    mavGitUrl = mavSiteUrl + '.git'
-    mavProjectName = 'PermissionHelper'
-    mavLibraryDescription = 'Simple Solution to implement Runtime Permissions in Android 6.0 and above'
-    mavLibraryLicenses = ["Apache-2.0":'http://www.apache.org/licenses/LICENSE-2.0.txt']
-    mavLibraryDescription = "A simple description of the project"
-    mavVersion = "1.1.0"
-    mavPublishToRemoteRepo = true
-    mavRemoteRepoUser = "har5hit@live.com"
-    mavRepoRemoteUrl = "https://dl.bintray.com/har5hit/PermissionHelper"
+publish {
+
+    userOrg = 'har5hit'
+    repoName = 'PermissionHelper'
+    groupId = 'com.justadeveloper96.android'
+    artifactId = 'permissionhelper'
+    publishVersion = '1.1.0'
+    uploadName = 'PermissionHelper'
+    desc = 'Simple Solution to implement Runtime Permissions in Android 6.0 and above'
+    website = 'https://github.com/har5hit/PermissionHelper'
+
 }
 
 android {

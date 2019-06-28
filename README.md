@@ -1,4 +1,4 @@
-# PermissionHelper
+# PermissionHelper [ ![Download](https://api.bintray.com/packages/har5hit/PermissionHelper/PermissionHelper/images/download.svg?version=1.1.0) ](https://bintray.com/har5hit/PermissionHelper/PermissionHelper/1.1.0/link)
 Android Permission Helper Library for easy permission requests.
 This will handle most of your permission handling job and simplify it by giving only 2 callbacks to the listener, success or failure.
 Included a Rationale to show when user denies permission.
@@ -8,7 +8,7 @@ Included a Rationale to show when user denies permission.
 Add the library to app build.gradle
 
 ```
-implementation 'com.justadeveloper96.utils:permissionhelper:1.1.0'
+implementation 'com.justadeveloper96.android:permissionhelper:1.1.0'
 ```
 
 ## Getting Started
