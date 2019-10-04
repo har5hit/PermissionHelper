@@ -7,7 +7,7 @@ publish {
     repoName = 'PermissionHelper'
     groupId = 'com.justadeveloper96.android'
     artifactId = 'permissionhelper'
-    publishVersion = '1.1.1'
+    publishVersion = '1.1.2'
     uploadName = 'PermissionHelper'
     desc = 'Simple Solution to implement Runtime Permissions in Android 6.0 and above'
     website = 'https://github.com/har5hit/PermissionHelper'
@@ -20,15 +20,15 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 5
-        versionName "1.1.1"
+        versionCode 6
+        versionName "1.1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
